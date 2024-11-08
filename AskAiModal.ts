@@ -1,9 +1,8 @@
-import { App, Modal, Setting, Notice, Editor, MarkdownView } from "obsidian";
+import { App, Modal, Setting, Notice, Editor, MarkdownView, Platform } from "obsidian";
 import { DeepSeekAPI } from "DeepSeekAPI";
 import { Marked } from "marked";
 import { ImageLib } from "ImageLib";
 import ObsidianAiBotPlugin from "main";
-import { setTimeout } from "timers/promises";
 
 export class AskAiModal extends Modal {
 	plugin: ObsidianAiBotPlugin;
@@ -100,12 +99,13 @@ export class AskAiModal extends Modal {
 					this.userInput = value;
 				});
 
-				setTimeout(100).then(() => {
+				setTimeout(() => {
 					this.inputEl.focus();
-				});
+				}, 100);
 			})
 			.addButton((btn) => {
 				this.okButton = btn.buttonEl;
+				this.okButton.setAttr("id", "okButton");
 				btn.setButtonText("Ask AI")
 					.setCta()
 					.setIcon("sparkles")

@@ -63,6 +63,11 @@ If your plugin does not need CSS, delete this file.
     z-index: 999;
 }
 
+#okButton,
+#cancelButton {
+    max-width: 60px;
+}
+
 #topToolBar {
     font-size: 13px;
 
