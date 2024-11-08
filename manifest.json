@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-ai-bot",
+	"name": "Obsidian AI bot",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "A plugin that helps you conveniently leverage the powerful capabilities of AI during your note-editing process.",
+	"author": "kuzzh",
+	"authorUrl": "https://github.com/kuzzh/obsidian-ai-bot",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }

@@ -6,3 +6,97 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+#askAiModal .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#askAiModal .setting-item {
+    width: 100%;
+    padding: 0px !important;
+    border-top: none;
+}
+
+#askAiModal .setting-item-info {
+    display: none;
+}
+
+#askAiModal .setting-item-control,
+#askAiModal .setting-item-control input,
+#display {
+    width: 100%;
+}
+
+#display {
+    display: none;
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto; /* 当内容超出最大高度时，显示滚动条 */
+    line-height: 1.5em;
+    user-select: text;
+    padding-top: 10px;
+}
+
+#askAiModal .modal-content > div:nth-child(2) {
+    margin-top: 10px;
+}
+
+#askAiModal .modal-close-button {
+    display: none;
+}
+
+#askAiModal .modal-header {
+    display: none;
+}
+
+#loading {
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-height: 100px;
+    max-height: 300px;
+    z-index: 999;
+}
+
+#topToolBar {
+    font-size: 13px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 10px 0px;
+
+    width: 100%;
+}
+
+#topToolBar input {
+    margin-right: 15px;
+}
+
+#bottomToolBar {
+    display: none;
+    justify-content: flex-end;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 10px 0px;
+
+    width: 100%;
+}
+
+#bottomToolBar button {
+    margin-left: 10px;
+}
+
+/* Style for SettingTab */
+.setting-input {
+    width: 100%;
+    max-width: 335px;
+}
