@@ -101,7 +101,10 @@ If your plugin does not need CSS, delete this file.
 }
 
 /* Style for SettingTab */
-.setting-input {
-    width: 100%;
-    max-width: 335px;
+#obsidianAiBotSetting input {
+    flex: 1;
+}
+
+#obsidianAiBotSetting .setting-item-control {
+    max-width: 50%;
 }

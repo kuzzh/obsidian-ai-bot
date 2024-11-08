@@ -3,6 +3,7 @@ import ObsidianAiBotPlugin from "main";
 
 export class SettingTab extends PluginSettingTab {
 	plugin: ObsidianAiBotPlugin;
+	apiKeyInputEl: HTMLInputElement;
 
 	constructor(app: App, plugin: ObsidianAiBotPlugin) {
 		super(app, plugin);
@@ -11,6 +12,8 @@ export class SettingTab extends PluginSettingTab {
 
 	display(): void {
 		const { containerEl } = this;
+
+		containerEl.setAttr("id", "obsidianAiBotSetting");
 
 		containerEl.empty();
 
@@ -28,15 +31,31 @@ export class SettingTab extends PluginSettingTab {
 				});
 		});
 
-		new Setting(containerEl).setName("API Key").addText((text) => {
-            text.inputEl.classList.add("setting-input");
-			text.setPlaceholder("Enter your API key")
-				.setValue(this.plugin.settings.apiKey)
-				.onChange(async (value) => {
-					this.plugin.settings.apiKey = value;
-					await this.plugin.saveSettings();
+		new Setting(containerEl)
+			.setName("API Key")
+			.addText((text) => {
+				this.apiKeyInputEl = text.inputEl;
+				this.apiKeyInputEl.classList.add("setting-input");
+				this.apiKeyInputEl.setAttr("type", "password");
+				text.setPlaceholder("Enter your API key")
+					.setValue(this.plugin.settings.apiKey)
+					.onChange(async (value) => {
+						this.plugin.settings.apiKey = value;
+						await this.plugin.saveSettings();
+					});
+			})
+			.addButton((btn) => {
+				btn.setIcon("eye");
+				btn.onClick((evt: MouseEvent) => {
+					if (this.apiKeyInputEl.type === "password") {
+						this.apiKeyInputEl.type = "text";
+						btn.setIcon("eye-off");
+					} else {
+						this.apiKeyInputEl.type = "password";
+						btn.setIcon("eye");
+					}
 				});
-		});
+			});
 
 		new Setting(containerEl).setName("Model").addText((text) =>
 			text
