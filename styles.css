@@ -105,6 +105,16 @@ If your plugin does not need CSS, delete this file.
     flex: 1;
 }
 
+#obsidianAiBotSetting button {
+    max-width: 40px;
+}
+
 #obsidianAiBotSetting .setting-item-control {
     max-width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    #obsidianAiBotSetting .setting-item-control {
+        max-width: 100%;
+    }
 }
