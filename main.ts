@@ -1,5 +1,5 @@
 import { Editor, MarkdownView, Notice, Plugin, Menu } from "obsidian";
-import { AskAiModal } from "AskAiModal"
+import { AskAiModal } from "AskAiModal";
 import { SettingTab } from "SettingTab";
 
 interface ObsidianAiBotPluginSettings {
@@ -41,8 +41,15 @@ export default class ObsidianAiBotPlugin extends Plugin {
 		this.addCommand({
 			id: "open-ask-ai-modal",
 			name: "Ask AI",
-			editorCallback: (editor: Editor, view: MarkdownView) => {
-				this.openAskAiModal(editor);
+			icon: "sparkles",
+			// editorCallback: (editor: Editor, view: MarkdownView) => {
+			// 	this.openAskAiModal(editor);
+			// },
+			callback: async () => {
+				const editor = this.getEditor();
+				if (editor) {
+					this.openAskAiModal(editor);
+				}
 			},
 		});
 
