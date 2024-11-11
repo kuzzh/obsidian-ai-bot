@@ -18,10 +18,10 @@ export class SettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName("Obsidian AI bot")
-			.setHeading()
-			.setDesc("Configuration for Obsidian AI bot");
+		// new Setting(containerEl)
+		// 	.setName("Obsidian AI bot")
+		// 	.setHeading()
+		// 	.setDesc("Configuration for Obsidian AI bot");
 
 		new Setting(containerEl)
 			.setName("Base URL")

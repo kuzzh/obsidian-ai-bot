@@ -1,10 +1,10 @@
 English | [中文](./README.zh-CN.md)
 
-# Obsidian AI Bot Plugin 🤖
+# AI Bot Plugin 🤖
 
 ## Overview 🌟
 
-The **Obsidian AI Bot Plugin** is a powerful tool designed to enhance your note-editing experience in Obsidian by leveraging the capabilities of AI. This plugin allows you to interact with an AI assistant directly within Obsidian, making it easier to generate, edit, and organize your notes with intelligent suggestions and automated tasks.
+The **AI Bot Plugin** is a powerful tool designed to enhance your note-editing experience in Obsidian by leveraging the capabilities of AI. This plugin allows you to interact with an AI assistant directly within Obsidian, making it easier to generate, edit, and organize your notes with intelligent suggestions and automated tasks.
 
 ## Features 🚀
 
@@ -29,20 +29,20 @@ The **Obsidian AI Bot Plugin** is a powerful tool designed to enhance your note-
 2. **Navigate to Plugin Folder**: Place the cloned folder in your `.obsidian/plugins/` directory.
 3. **Install Dependencies**: Run `npm install` to install the necessary dependencies.
 4. **Build the Plugin**: Run `npm run dev` to compile the plugin.
-5. **Enable the Plugin**: Open Obsidian, go to Settings > Community Plugins, and enable the "Obsidian AI Bot" plugin.
+5. **Enable the Plugin**: Open Obsidian, go to Settings > Community Plugins, and enable the "AI Bot" plugin.
 
 ### From Obsidian Community Plugins
 
 1. **Open Obsidian**: Launch Obsidian and go to Settings.
 2. **Community Plugins**: Navigate to the Community Plugins section.
-3. **Browse**: Search for "Obsidian AI Bot" and install it.
+3. **Browse**: Search for "AI Bot" and install it.
 4. **Enable**: Enable the plugin from the list of installed plugins.
 
 ## Usage 📚
 
 ### Configuration
 
-1. **Open Settings**: Go to the plugin settings by clicking on the "Obsidian AI Bot" tab in the Obsidian settings.
+1. **Open Settings**: Go to the plugin settings by clicking on the "AI Bot" tab in the Obsidian settings.
 2. **Enter Base URL**: Provide the base URL for the AI service.
 3. **API Key**: Enter your API key for authentication.
 4. **Model**: Specify the AI model you want to use.
