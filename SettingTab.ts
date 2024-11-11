@@ -21,7 +21,10 @@ export class SettingTab extends PluginSettingTab {
 			.setName("Obsidian AI bot")
 			.setDesc("Configuration for Obsidian AI bot");
 
-		new Setting(containerEl).setName("Base URL").addText((text) => {
+		new Setting(containerEl)
+		.setName("Base URL")
+		.setDesc("API base URL.")
+		.addText((text) => {
 			text.inputEl.classList.add("setting-input");
 			text.setPlaceholder("Enter your base URL")
 				.setValue(this.plugin.settings.baseURL)
@@ -33,6 +36,7 @@ export class SettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("API Key")
+			.setDesc("API Key is stored in plain text locally.")
 			.addText((text) => {
 				this.apiKeyInputEl = text.inputEl;
 				this.apiKeyInputEl.classList.add("setting-input");
@@ -57,7 +61,10 @@ export class SettingTab extends PluginSettingTab {
 				});
 			});
 
-		new Setting(containerEl).setName("Model").addText((text) =>
+		new Setting(containerEl)
+		.setName("Model")
+		.setDesc("API Model")
+		.addText((text) =>
 			text
 				.setPlaceholder("Enter your model")
 				.setValue(this.plugin.settings.model)

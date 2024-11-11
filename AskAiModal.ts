@@ -1,4 +1,11 @@
-import { App, Modal, Setting, Notice, Editor, MarkdownView, Platform } from "obsidian";
+import {
+	App,
+	Modal,
+	Setting,
+	Notice,
+	Editor,
+	MarkdownView,
+} from "obsidian";
 import { DeepSeekAPI } from "DeepSeekAPI";
 import { Marked } from "marked";
 import { ImageLib } from "ImageLib";
@@ -21,6 +28,7 @@ export class AskAiModal extends Modal {
 	appendToTailButton: HTMLButtonElement;
 	copyButton: HTMLButtonElement;
 	topToolBar: HTMLDivElement;
+	noContextRadioButton: HTMLInputElement;
 	selectionAsContextRadioButton: HTMLInputElement;
 	wholeTextAsContextRadioButton: HTMLInputElement;
 
@@ -47,15 +55,21 @@ export class AskAiModal extends Modal {
 	onOpen() {
 		const { contentEl } = this;
 
-		// contentEl.createEl("h1", { text: "Ask AI" });
-
-		// 顶部工具栏
 		this.topToolBar = contentEl.createEl("div", {
 			attr: { id: "topToolBar" },
 		});
+
+		this.noContextRadioButton = this.topToolBar.createEl("input", {
+			attr: {
+				type: "radio",
+				id: "noContextRadioButton",
+				name: "contextRadioButton",
+			},
+		});
 		this.topToolBar.createEl("label", {
-			attr: { for: "selectionAsContextRadioButton" },
-		}).innerText = "选中的文本";
+			attr: { for: "noContextRadioButton" },
+		}).innerText = "No context";
+
 		this.selectionAsContextRadioButton = this.topToolBar.createEl("input", {
 			attr: {
 				type: "radio",
@@ -63,13 +77,17 @@ export class AskAiModal extends Modal {
 				name: "contextRadioButton",
 			},
 		});
+		this.topToolBar.createEl("label", {
+			attr: {
+				id: "selectionAsContextLabel",
+				for: "selectionAsContextRadioButton",
+			},
+		}).innerText = "Selected text";
+
 		if (this.selectedText !== "") {
 			this.selectionAsContextRadioButton.setAttr("checked", true);
 		}
 
-		this.topToolBar.createEl("label", {
-			attr: { for: "wholeTextAsContextRadioButton" },
-		}).innerText = "整篇笔记";
 		this.wholeTextAsContextRadioButton = this.topToolBar.createEl("input", {
 			attr: {
 				type: "radio",
@@ -77,22 +95,29 @@ export class AskAiModal extends Modal {
 				name: "contextRadioButton",
 			},
 		});
-		if (this.selectedText === "") {
-			this.wholeTextAsContextRadioButton.setAttr("checked", true);
-		}
+		this.topToolBar.createEl("label", {
+			attr: { for: "wholeTextAsContextRadioButton" },
+		}).innerText = "Full note";
 
 		if (this.selectedText === "") {
-			this.topToolBar.style.display = "none";
+			const selectionAsContextLabel = document.getElementById(
+				"selectionAsContextLabel"
+			);
+			if (selectionAsContextLabel) {
+				selectionAsContextLabel.style.display = "none";
+			}
+			this.selectionAsContextRadioButton.style.display = "none";
+			this.wholeTextAsContextRadioButton.setAttr("checked", true);
 		}
 
 		new Setting(contentEl)
 			.addText((text) => {
-				this.inputEl = text.inputEl; // 获取 input 元素的引用
+				this.inputEl = text.inputEl;
 				this.inputEl.placeholder = "Ask Obsidian AI bot";
 				this.inputEl.addEventListener("keydown", (event) => {
 					if (event.key === "Enter") {
-						event.preventDefault(); // 阻止默认的回车行为
-						this.onOk(); // 触发按钮的点击事件
+						event.preventDefault();
+						this.onOk();
 					}
 				});
 				text.setValue(this.userInput).onChange((value) => {
@@ -119,12 +144,10 @@ export class AskAiModal extends Modal {
 				this.hideCancelButton();
 			});
 
-		// 结果显示区域
 		this.displayEl = contentEl.createEl("div", {
 			attr: { id: "display" },
 		});
 
-		// 底部工具栏
 		this.bottomToolBar = contentEl.createEl("div", {
 			attr: { id: "bottomToolBar" },
 		});
@@ -132,7 +155,7 @@ export class AskAiModal extends Modal {
 		this.copyButton = this.bottomToolBar.createEl("button", {
 			attr: { id: "copyButton" },
 		});
-		this.copyButton.textContent = "复制";
+		this.copyButton.textContent = "Copy";
 		this.copyButton.addEventListener("click", () => this.copyResult());
 
 		if (this.selectedText !== "") {
@@ -142,7 +165,7 @@ export class AskAiModal extends Modal {
 					attr: { id: "replaceSelectionButton" },
 				}
 			);
-			this.replaceSelectionButton.textContent = "替换选中";
+			this.replaceSelectionButton.textContent = "Replace the selected text";
 			this.replaceSelectionButton.addEventListener("click", () =>
 				this.replaceSelection()
 			);
@@ -151,7 +174,7 @@ export class AskAiModal extends Modal {
 		this.insertToCursorPosButton = this.bottomToolBar.createEl("button", {
 			attr: { id: "insertToCursorPosButton" },
 		});
-		this.insertToCursorPosButton.textContent = "插入光标位置";
+		this.insertToCursorPosButton.textContent = "Insert at cursor position";
 		this.insertToCursorPosButton.addEventListener("click", () =>
 			this.insertToCursorPos()
 		);
@@ -159,7 +182,7 @@ export class AskAiModal extends Modal {
 		this.appendToTailButton = this.bottomToolBar.createEl("button", {
 			attr: { id: "appendToTailButton" },
 		});
-		this.appendToTailButton.textContent = "追加到末尾";
+		this.appendToTailButton.textContent = "Append to the end";
 		this.appendToTailButton.addEventListener("click", () =>
 			this.appendToTail()
 		);
@@ -193,13 +216,10 @@ export class AskAiModal extends Modal {
 		if (!editor) {
 			return;
 		}
-		// 获取当前光标位置
 		const cursor = editor.getCursor();
 
-		// 在光标位置插入文本
 		editor.replaceRange("\n" + textToInsert + "\n", cursor);
 
-		// 将光标移动到插入文本的末尾
 		const newCursorPos = {
 			line: cursor.line,
 			ch: cursor.ch + textToInsert.length + 1,
@@ -217,22 +237,12 @@ export class AskAiModal extends Modal {
 			return;
 		}
 
-		// 获取当前编辑器的内容
 		const currentContent = editor.getValue();
-
-		// 在末尾追加文本
 		const newContent = currentContent + "\n\n" + textToAppend;
-
-		// 设置新的编辑器内容
 		editor.setValue(newContent);
 
-		// 获取编辑器的最后一行的行号
 		const lastLine = editor.lastLine();
-
-		// 获取最后一行的内容
 		const lastLineContent = editor.getLine(lastLine);
-
-		// 将光标移动到最后一行的末尾
 		editor.setCursor({
 			line: lastLine,
 			ch: lastLineContent.length,
@@ -256,17 +266,14 @@ export class AskAiModal extends Modal {
 	copyResult() {
 		const textToCopy = this.getResult();
 
-		// 将文本复制到剪贴板
 		navigator.clipboard
 			.writeText(textToCopy)
 			.then(() => {
-				// 用 Notice 提示复制成功
-				new Notice("文本已成功复制到剪贴板");
+				new Notice("Text has been successfully copied to the clipboard.");
 			})
 			.catch((error) => {
-				// 处理复制失败的情况
-				new Notice("复制失败，请重试");
-				console.error("复制失败:", error);
+				new Notice("Copy failed, please try again.");
+				console.error("Copy failed: ", error);
 			});
 	}
 
@@ -275,7 +282,6 @@ export class AskAiModal extends Modal {
 	}
 
 	getEditor(): Editor | null {
-		// 获取当前活动的 MarkdownView
 		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 		if (view) {
 			return view.editor;
@@ -284,12 +290,10 @@ export class AskAiModal extends Modal {
 	}
 
 	appendToDisplay(markdownText: string) {
-		// const htmlContent = this.marked.parseInline(markdownText);
 		markdownText = markdownText.replace("\n", "<br />");
 		if (this.displayEl) {
 			this.displayEl.innerHTML += markdownText;
 
-			// 滚动到底部
 			this.displayEl.lastElementChild?.scrollIntoView({
 				behavior: "smooth",
 			});
@@ -303,8 +307,10 @@ export class AskAiModal extends Modal {
 		this.clearDisplay();
 		this.enableOkButton(false);
 
-		let context = this.wholeText;
-		if (
+		let context = "";
+		if (this.wholeTextAsContextRadioButton.checked) {
+			context = this.wholeText;
+		} else if (
 			this.selectedText !== "" &&
 			this.selectionAsContextRadioButton.checked
 		) {

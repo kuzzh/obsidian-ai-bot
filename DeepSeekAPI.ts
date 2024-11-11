@@ -32,16 +32,16 @@ export class DeepSeekAPI {
 		this.cancel = false;
 
 		if (contextText) {
-			userInput = `针对以下文字，${userInput}\n\n${contextText}`;
+			userInput = `Based on the following text: ${userInput}\n\n${contextText}`;
 		}
 		const stream = await this.openai.chat.completions.create({
 			model: this.plugin.settings.model,
 			messages: [
-				{ role: "system", content: "你是一个有用的助手。" },
+				{ role: "system", content: "You are a helpful assistant" },
 				{ role: "user", content: userInput },
 			],
 			max_tokens: 4096,
-			stream: true, // 启用流式返回
+			stream: true,
 		});
 
 		for await (const chunk of stream) {
