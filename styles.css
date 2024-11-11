@@ -6,6 +6,9 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+.error-text {
+    color: #E53935;
+}
 
 #askAiModal .modal-content {
     display: flex;
@@ -113,6 +116,10 @@ If your plugin does not need CSS, delete this file.
 
 #obsidianAiBotSetting .setting-item-control {
     max-width: 50%;
+}
+
+#obsidianAiBotSetting #maxTokensInput {
+    max-width: 60px;
 }
 
 @media screen and (max-width: 768px) {

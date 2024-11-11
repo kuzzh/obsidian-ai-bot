@@ -1,17 +1,19 @@
 import { Editor, MarkdownView, Notice, Plugin, Menu } from "obsidian";
-import { AskAiModal } from "AskAiModal";
-import { SettingTab } from "SettingTab";
+import { AskAiModal } from "src/AskAiModal";
+import { SettingTab } from "src/SettingTab";
 
 interface ObsidianAiBotPluginSettings {
 	baseURL: string;
 	apiKey: string;
 	model: string;
+	maxTokens: number;
 }
 
 const DEFAULT_SETTINGS: ObsidianAiBotPluginSettings = {
 	baseURL: "https://api.deepseek.com",
 	apiKey: "",
 	model: "deepseek-chat",
+	maxTokens: 4096
 };
 
 export default class ObsidianAiBotPlugin extends Plugin {

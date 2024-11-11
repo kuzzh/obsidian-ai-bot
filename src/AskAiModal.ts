@@ -6,10 +6,10 @@ import {
 	Editor,
 	MarkdownView,
 } from "obsidian";
-import { DeepSeekAPI } from "DeepSeekAPI";
+import { DeepSeekAPI } from "src/DeepSeekAPI";
 import { Marked } from "marked";
-import { ImageLib } from "ImageLib";
-import ObsidianAiBotPlugin from "main";
+import { ImageLib } from "src/ImageLib";
+import ObsidianAiBotPlugin from "src/main";
 
 export class AskAiModal extends Modal {
 	plugin: ObsidianAiBotPlugin;
@@ -47,7 +47,8 @@ export class AskAiModal extends Modal {
 		this.deepSeekAPI = new DeepSeekAPI(
 			plugin,
 			(text) => this.onResult(text),
-			() => this.onFinish()
+			() => this.onFinish(),
+			(msg) => this.onError(msg)
 		);
 		this.marked = new Marked();
 	}
@@ -187,7 +188,6 @@ export class AskAiModal extends Modal {
 			this.appendToTail()
 		);
 
-		// 等待框
 		this.loadingEl = contentEl.createEl("div", {
 			attr: { id: "loading" },
 		});
@@ -206,7 +206,18 @@ export class AskAiModal extends Modal {
 	onFinish() {
 		this.showToolBar();
 		this.hideCancelButton();
-		this.enableOkButton(true);
+		this.enableGUI(true);
+	}
+
+	onError(msg: string) {
+		msg = `<span class="error-text">${msg}</span>`;
+		
+		this.showDisplay();
+		this.appendToDisplay(msg);
+
+		this.hideLoading();
+		this.hideCancelButton();
+		this.enableGUI(true);
 	}
 
 	insertToCursorPos() {
@@ -305,7 +316,7 @@ export class AskAiModal extends Modal {
 		this.hideToolBar();
 		this.showLoading();
 		this.clearDisplay();
-		this.enableOkButton(false);
+		this.enableGUI(false);
 
 		let context = "";
 		if (this.wholeTextAsContextRadioButton.checked) {
@@ -325,13 +336,16 @@ export class AskAiModal extends Modal {
 		contentEl.empty();
 	}
 
-	enableOkButton(enable: boolean) {
+	enableGUI(enable: boolean) {
 		this.okButton.disabled = !enable;
 		this.inputEl.disabled = !enable;
+		this.noContextRadioButton.disabled = !enable;
+		this.selectionAsContextRadioButton.disabled = !enable;
+		this.wholeTextAsContextRadioButton.disabled = !enable;
 	}
 
 	clearDisplay() {
-		this.displayEl.innerHTML = "";
+		this.displayEl.empty();
 	}
 
 	showDisplay() {
