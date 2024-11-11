@@ -46,6 +46,7 @@ The **Obsidian AI Bot Plugin** is a powerful tool designed to enhance your note-
 2. **Enter Base URL**: Provide the base URL for the AI service.
 3. **API Key**: Enter your API key for authentication.
 4. **Model**: Specify the AI model you want to use.
+5. **Max Tokens**: Specify the max tokens of the model.
 
 ### Interacting with the AI
 
