@@ -5,7 +5,5 @@
 	"minAppVersion": "0.15.0",
 	"description": "A plugin that helps you conveniently leverage the powerful capabilities of AI during your note-editing process.",
 	"author": "kuzzh",
-	"authorUrl": "https://github.com/kuzzh",
-	"fundingUrl": "",
 	"isDesktopOnly": false
 }
