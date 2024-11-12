@@ -10,6 +10,18 @@ If your plugin does not need CSS, delete this file.
     color: #E53935;
 }
 
+.hide {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.block {
+    display: block;
+}
+
 #askAiModal .modal-content {
     display: flex;
     flex-direction: column;
@@ -34,7 +46,6 @@ If your plugin does not need CSS, delete this file.
 }
 
 #display {
-    display: none;
     min-height: 100px;
     max-height: 300px;
     overflow-y: auto;
@@ -56,7 +67,6 @@ If your plugin does not need CSS, delete this file.
 }
 
 #loading {
-    display: none;
     justify-content: center;
     align-items: center;
 
@@ -64,6 +74,11 @@ If your plugin does not need CSS, delete this file.
     min-height: 100px;
     max-height: 300px;
     z-index: 999;
+}
+
+#loading img{
+    width: 48px;
+    height: 48px;
 }
 
 #okButton,
@@ -89,7 +104,6 @@ If your plugin does not need CSS, delete this file.
 } */
 
 #bottomToolBar {
-    display: none;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;

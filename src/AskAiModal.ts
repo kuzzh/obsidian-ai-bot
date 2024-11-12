@@ -1,11 +1,4 @@
-import {
-	App,
-	Modal,
-	Setting,
-	Notice,
-	Editor,
-	MarkdownView,
-} from "obsidian";
+import { Modal, Setting, Notice, Editor, MarkdownView } from "obsidian";
 import { DeepSeekAPI } from "src/DeepSeekAPI";
 import { Marked } from "marked";
 import { ImageLib } from "src/ImageLib";
@@ -20,6 +13,7 @@ export class AskAiModal extends Modal {
 	marked: Marked;
 	inputEl: HTMLInputElement;
 	okButton: HTMLButtonElement;
+	cancelButton: HTMLButtonElement;
 	displayEl: HTMLDivElement;
 	loadingEl: HTMLDivElement;
 	bottomToolBar: HTMLDivElement;
@@ -105,9 +99,9 @@ export class AskAiModal extends Modal {
 				"selectionAsContextLabel"
 			);
 			if (selectionAsContextLabel) {
-				selectionAsContextLabel.style.display = "none";
+				this.hideEl(selectionAsContextLabel);
 			}
-			this.selectionAsContextRadioButton.style.display = "none";
+			this.hideEl(this.selectionAsContextRadioButton);
 			this.wholeTextAsContextRadioButton.setAttr("checked", true);
 		}
 
@@ -138,20 +132,23 @@ export class AskAiModal extends Modal {
 					.onClick(() => this.onOk());
 			})
 			.addButton((btn) => {
-				btn.buttonEl.setAttr("id", "cancelButton");
+				this.cancelButton = btn.buttonEl;
+				this.cancelButton.setAttr("id", "cancelButton");
 				btn.setButtonText("Cancel")
 					.setCta()
 					.onClick(() => (this.deepSeekAPI.cancel = true));
-				this.hideCancelButton();
+				this.hideEl(this.cancelButton);
 			});
 
 		this.displayEl = contentEl.createEl("div", {
 			attr: { id: "display" },
 		});
+		this.hideEl(this.displayEl, 'block');
 
 		this.bottomToolBar = contentEl.createEl("div", {
 			attr: { id: "bottomToolBar" },
 		});
+		this.hideEl(this.bottomToolBar);
 
 		this.copyButton = this.bottomToolBar.createEl("button", {
 			attr: { id: "copyButton" },
@@ -166,7 +163,8 @@ export class AskAiModal extends Modal {
 					attr: { id: "replaceSelectionButton" },
 				}
 			);
-			this.replaceSelectionButton.textContent = "Replace the selected text";
+			this.replaceSelectionButton.textContent =
+				"Replace the selected text";
 			this.replaceSelectionButton.addEventListener("click", () =>
 				this.replaceSelection()
 			);
@@ -191,32 +189,35 @@ export class AskAiModal extends Modal {
 		this.loadingEl = contentEl.createEl("div", {
 			attr: { id: "loading" },
 		});
-		this.loadingEl.innerHTML = `<img src="${
-			new ImageLib().loadingGif
-		}" width=48 height=48 />`;
+		this.loadingEl.createEl("img", {
+			attr: {
+				src: new ImageLib().loadingGif,
+			},
+		});
+		this.hideEl(this.loadingEl);
 	}
 
 	onResult(text: string) {
-		this.hideLoading();
-		this.showDisplay();
-		this.showCancelButton();
+		this.hideEl(this.loadingEl);
+		this.showEl(this.displayEl, 'block');
+		this.showEl(this.cancelButton);
 		this.appendToDisplay(text);
 	}
 
 	onFinish() {
-		this.showToolBar();
-		this.hideCancelButton();
+		this.showEl(this.bottomToolBar);
+		this.hideEl(this.cancelButton);
 		this.enableGUI(true);
 	}
 
 	onError(msg: string) {
 		msg = `<span class="error-text">${msg}</span>`;
-		
-		this.showDisplay();
+
+		this.showEl(this.displayEl, 'block');
 		this.appendToDisplay(msg);
 
-		this.hideLoading();
-		this.hideCancelButton();
+		this.hideEl(this.loadingEl);
+		this.hideEl(this.cancelButton);
 		this.enableGUI(true);
 	}
 
@@ -280,7 +281,9 @@ export class AskAiModal extends Modal {
 		navigator.clipboard
 			.writeText(textToCopy)
 			.then(() => {
-				new Notice("Text has been successfully copied to the clipboard.");
+				new Notice(
+					"Text has been successfully copied to the clipboard."
+				);
 			})
 			.catch((error) => {
 				new Notice("Copy failed, please try again.");
@@ -301,9 +304,24 @@ export class AskAiModal extends Modal {
 	}
 
 	appendToDisplay(markdownText: string) {
-		markdownText = markdownText.replace("\n", "<br />");
+		const fragment = document.createDocumentFragment();
+
+		const lines = markdownText.split("\n");
+
+		let lineIndex = 0;
+		lines.forEach((line) => {
+			const span = document.createElement("span");
+			span.textContent = line;
+			fragment.appendChild(span);
+
+			if (lineIndex > 0) {
+				fragment.appendChild(document.createElement("br"));
+			}
+			lineIndex += 1;
+		});
+
 		if (this.displayEl) {
-			this.displayEl.innerHTML += markdownText;
+			this.displayEl.appendChild(fragment);
 
 			this.displayEl.lastElementChild?.scrollIntoView({
 				behavior: "smooth",
@@ -312,9 +330,9 @@ export class AskAiModal extends Modal {
 	}
 
 	onOk() {
-		this.hideDisplay();
-		this.hideToolBar();
-		this.showLoading();
+		this.hideEl(this.displayEl, 'block');
+		this.hideEl(this.bottomToolBar);
+		this.showEl(this.loadingEl);
 		this.clearDisplay();
 		this.enableGUI(false);
 
@@ -348,41 +366,19 @@ export class AskAiModal extends Modal {
 		this.displayEl.empty();
 	}
 
-	showDisplay() {
-		this.displayEl.style.display = "flex";
-	}
-
-	hideDisplay() {
-		this.displayEl.style.display = "none";
-	}
-
-	showToolBar() {
-		this.bottomToolBar.style.display = "flex";
-	}
-
-	hideToolBar() {
-		this.bottomToolBar.style.display = "none";
-	}
-
-	showLoading() {
-		this.loadingEl.style.display = "flex";
-	}
-
-	hideLoading() {
-		this.loadingEl.style.display = "none";
-	}
-
-	showCancelButton() {
-		const cancelButton = document.getElementById("cancelButton");
-		if (cancelButton) {
-			cancelButton.style.display = "inline-flex";
+	showEl(el: HTMLElement | null, cls: string = 'flex') {
+		if (!el) {
+			return;
 		}
+		el.classList.remove("hide");
+		el.classList.add(cls);
 	}
 
-	hideCancelButton() {
-		const cancelButton = document.getElementById("cancelButton");
-		if (cancelButton) {
-			cancelButton.style.display = "none";
+	hideEl(el: HTMLElement | null, cls: string = 'flex') {
+		if (!el) {
+			return;
 		}
+		el.classList.remove(cls);
+		el.classList.add("hide");
 	}
 }

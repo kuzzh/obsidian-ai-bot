@@ -56,6 +56,7 @@ export class DeepSeekAPI {
 				const text = chunk.choices[0]?.delta?.content || "";
 
 				if (this.onResult) {
+					console.log(text);
 					this.onResult(text);
 				}
 			}
