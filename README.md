@@ -21,6 +21,16 @@ The **AI Bot Plugin** is a powerful tool designed to enhance your note-editing e
 - **Flexibility**: Customize the plugin to work with different AI models and APIs.
 - **User-Centric Design**: Designed with the user in mind, offering a smooth and intuitive experience.
 
+## Supported AI Services 🧠
+
+The AI Bot Plugin supports integration with popular AI services such as:
+
+- **DeepSeek**: Access `deepseek-chat` model on DeepSeek.
+- **OpenAI**: Utilize models like `GPT-3`, `GPT-4`, and others from OpenAI.
+- **Custom APIs**: Configure the plugin to work with any custom AI service by specifying the base URL and API key.
+
+Since the AI Bot plugin uses the [OpenAI Node API Library](https://github.com/openai/openai-node) at its core, in theory, the AI Bot plugin supports any service that the OpenAI Node API Library supports.
+
 ## Installation 🛠️
 
 ### Manual Installation

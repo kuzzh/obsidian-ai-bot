@@ -37,7 +37,7 @@ export class AskAiModal extends Modal {
 		this.selectedText = selectedText;
 		this.wholeText = wholeText;
 
-		this.containerEl.setAttr("id", "askAiModal");
+		this.containerEl.setAttr("id", "aibotAskAiModal");
 		this.deepSeekAPI = new DeepSeekAPI(
 			plugin,
 			(text) => this.onResult(text),
@@ -51,7 +51,7 @@ export class AskAiModal extends Modal {
 		const { contentEl } = this;
 
 		this.topToolBar = contentEl.createEl("div", {
-			attr: { id: "topToolBar" },
+			attr: { id: "aiBotTopToolBar" },
 		});
 
 		this.noContextRadioButton = this.topToolBar.createEl("input", {
@@ -108,7 +108,7 @@ export class AskAiModal extends Modal {
 		new Setting(contentEl)
 			.addText((text) => {
 				this.inputEl = text.inputEl;
-				this.inputEl.placeholder = "Ask Obsidian AI bot";
+				this.inputEl.placeholder = "Ask AI bot";
 				this.inputEl.addEventListener("keydown", (event) => {
 					if (event.key === "Enter") {
 						event.preventDefault();
@@ -125,7 +125,7 @@ export class AskAiModal extends Modal {
 			})
 			.addButton((btn) => {
 				this.okButton = btn.buttonEl;
-				this.okButton.setAttr("id", "okButton");
+				this.okButton.setAttr("id", "aibotOkButton");
 				btn.setButtonText("Ask AI")
 					.setCta()
 					.setIcon("sparkles")
@@ -133,7 +133,8 @@ export class AskAiModal extends Modal {
 			})
 			.addButton((btn) => {
 				this.cancelButton = btn.buttonEl;
-				this.cancelButton.setAttr("id", "cancelButton");
+				this.cancelButton.setAttr("id", "aibotCancelButton");
+				this.cancelButton.setAttr("class", "mod-warning");
 				btn.setButtonText("Cancel")
 					.setCta()
 					.onClick(() => (this.deepSeekAPI.cancel = true));
@@ -141,12 +142,12 @@ export class AskAiModal extends Modal {
 			});
 
 		this.displayEl = contentEl.createEl("div", {
-			attr: { id: "display" },
+			attr: { id: "aibotDisplay" },
 		});
-		this.hideEl(this.displayEl, 'block');
+		this.hideEl(this.displayEl, 'aibot-block');
 
 		this.bottomToolBar = contentEl.createEl("div", {
-			attr: { id: "bottomToolBar" },
+			attr: { id: "aibotBottomToolBar" },
 		});
 		this.hideEl(this.bottomToolBar);
 
@@ -187,7 +188,7 @@ export class AskAiModal extends Modal {
 		);
 
 		this.loadingEl = contentEl.createEl("div", {
-			attr: { id: "loading" },
+			attr: { id: "aibotLoading" },
 		});
 		this.loadingEl.createEl("img", {
 			attr: {
@@ -199,7 +200,7 @@ export class AskAiModal extends Modal {
 
 	onResult(text: string) {
 		this.hideEl(this.loadingEl);
-		this.showEl(this.displayEl, 'block');
+		this.showEl(this.displayEl, 'aibot-block');
 		this.showEl(this.cancelButton);
 		this.appendToDisplay(text);
 	}
@@ -211,10 +212,8 @@ export class AskAiModal extends Modal {
 	}
 
 	onError(msg: string) {
-		msg = `<span class="error-text">${msg}</span>`;
-
-		this.showEl(this.displayEl, 'block');
-		this.appendToDisplay(msg);
+		this.showEl(this.displayEl, 'aibot-block');
+		this.appendErrorToDisplay(msg);
 
 		this.hideEl(this.loadingEl);
 		this.hideEl(this.cancelButton);
@@ -329,8 +328,14 @@ export class AskAiModal extends Modal {
 		}
 	}
 
+	appendErrorToDisplay(error: string) {
+		if (this.displayEl) {
+			this.displayEl.createEl("span", {cls: "aibot-error-text", text: error});
+		}
+	}
+
 	onOk() {
-		this.hideEl(this.displayEl, 'block');
+		this.hideEl(this.displayEl, 'aibot-block');
 		this.hideEl(this.bottomToolBar);
 		this.showEl(this.loadingEl);
 		this.clearDisplay();
@@ -366,19 +371,19 @@ export class AskAiModal extends Modal {
 		this.displayEl.empty();
 	}
 
-	showEl(el: HTMLElement | null, cls: string = 'flex') {
+	showEl(el: HTMLElement | null, cls: string = 'aibot-flex') {
 		if (!el) {
 			return;
 		}
-		el.classList.remove("hide");
+		el.classList.remove("aibot-hide");
 		el.classList.add(cls);
 	}
 
-	hideEl(el: HTMLElement | null, cls: string = 'flex') {
+	hideEl(el: HTMLElement | null, cls: string = 'aibot-flex') {
 		if (!el) {
 			return;
 		}
 		el.classList.remove(cls);
-		el.classList.add("hide");
+		el.classList.add("aibot-hide");
 	}
 }

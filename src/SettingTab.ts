@@ -14,14 +14,9 @@ export class SettingTab extends PluginSettingTab {
 	display(): void {
 		const { containerEl } = this;
 
-		containerEl.setAttr("id", "obsidianAiBotSetting");
+		containerEl.setAttr("id", "aiBotSetting");
 
 		containerEl.empty();
-
-		// new Setting(containerEl)
-		// 	.setName("Obsidian AI bot")
-		// 	.setHeading()
-		// 	.setDesc("Configuration for Obsidian AI bot");
 
 		new Setting(containerEl)
 			.setName("Base URL")
@@ -65,7 +60,7 @@ export class SettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Model")
-			.setDesc("API Model")
+			.setDesc("API model")
 			.addText((text) =>
 				text
 					.setPlaceholder("Enter your model")
@@ -92,7 +87,7 @@ export class SettingTab extends PluginSettingTab {
 			)
 			.addText((text) => {
 				this.maxTokensEl = text;
-				text.inputEl.setAttr("id", "maxTokensInput");
+				text.inputEl.setAttr("id", "aibotMaxTokensInput");
 				text.setDisabled(true).setValue(
 					this.plugin.settings.maxTokens.toString()
 				);

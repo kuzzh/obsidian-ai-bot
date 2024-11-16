@@ -1,51 +1,43 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
-.error-text {
-    color: #E53935;
+.aibot-error-text {
+    color: var(--text-error);
 }
 
-.hide {
+.aibot-hide {
     display: none;
 }
 
-.flex {
+.aibot-flex {
     display: flex;
 }
 
-.block {
+.aibot-block {
     display: block;
 }
 
-#askAiModal .modal-content {
+#aibotAskAiModal .modal-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
 }
 
-#askAiModal .setting-item {
+#aibotAskAiModal .setting-item {
     width: 100%;
     padding: 0px !important;
     border-top: none;
 }
 
-#askAiModal .setting-item-info {
+#aibotAskAiModal .setting-item-info {
     display: none;
 }
 
-#askAiModal .setting-item-control,
-#askAiModal .setting-item-control input,
-#display {
+#aibotAskAiModal .setting-item-control,
+#aibotAskAiModal .setting-item-control input,
+#aibotDisplay {
     width: 100%;
 }
 
-#display {
+#aibotDisplay {
     min-height: 100px;
     max-height: 300px;
     overflow-y: auto;
@@ -54,19 +46,19 @@ If your plugin does not need CSS, delete this file.
     padding-top: 10px;
 }
 
-#askAiModal .modal-content > div:nth-child(2) {
+#aibotAskAiModal .modal-content > div:nth-child(2) {
     margin-top: 10px;
 }
 
-#askAiModal .modal-close-button {
+#aibotAskAiModal .modal-close-button {
     display: none;
 }
 
-#askAiModal .modal-header {
+#aibotAskAiModal .modal-header {
     display: none;
 }
 
-#loading {
+#aibotLoading {
     justify-content: center;
     align-items: center;
 
@@ -76,17 +68,17 @@ If your plugin does not need CSS, delete this file.
     z-index: 999;
 }
 
-#loading img{
+#aibotLoading img{
     width: 48px;
     height: 48px;
 }
 
-#okButton,
-#cancelButton {
+#aibotOkButton,
+#aibotCancelButton {
     max-width: 60px;
 }
 
-#topToolBar {
+#aiBotTopToolBar {
     font-size: 13px;
 
     display: flex;
@@ -94,16 +86,11 @@ If your plugin does not need CSS, delete this file.
     align-items: center;
 
     box-sizing: border-box;
-    /* padding: 10px 0px; */
 
     width: 100%;
 }
 
-/* #topToolBar input {
-    margin-right: 15px;
-} */
-
-#bottomToolBar {
+#aibotBottomToolBar {
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
@@ -114,33 +101,33 @@ If your plugin does not need CSS, delete this file.
     width: 100%;
 }
 
-#bottomToolBar button {
+#aibotBottomToolBar button {
     margin-left: 5px;
     margin-top: 5px;
 }
 
 /* Style for SettingTab */
-#obsidianAiBotSetting input {
+#aiBotSetting input {
     flex: 1;
 }
 
-#obsidianAiBotSetting button {
+#aiBotSetting button {
     max-width: 40px;
 }
 
-#obsidianAiBotSetting .setting-item-control {
+#aiBotSetting .setting-item-control {
     max-width: 50%;
 }
 
-#obsidianAiBotSetting #maxTokensInput {
+#aiBotSetting #aibotMaxTokensInput {
     max-width: 60px;
 }
 
 @media screen and (max-width: 768px) {
-    #askAiModal .modal-content > div:nth-child(2) {
+    #aibotAskAiModal .modal-content > div:nth-child(2) {
         margin-top: 0px;
     }
-    #obsidianAiBotSetting .setting-item-control {
+    #aiBotSetting .setting-item-control {
         max-width: 100%;
     }
 }

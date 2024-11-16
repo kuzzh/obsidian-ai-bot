@@ -21,6 +21,16 @@
 - **灵活性**：自定义插件以使用不同的 AI 模型和 API。
 - **以用户为中心的设计**：以用户为中心设计，提供流畅直观的体验。
 
+## 支持的 AI 服务 🧠
+
+AI Bot 插件支持与以下流行的 AI 服务集成：
+
+- **DeepSeek**：访问 DeepSeek 的 `deepseek-chat` 模型。
+- **OpenAI**：使用 OpenAI 的模型，如 `GPT-3`、`GPT-4` 等。
+- **自定义 API**：通过指定基础 URL 和 API 密钥，配置插件以与任何自定义 AI 服务一起工作。
+
+由于 AI Bot 插件的核心使用了 [OpenAI Node API 库](https://github.com/openai/openai-node)，理论上，AI Bot 插件支持 OpenAI Node API 库所支持的任何服务。
+
 ## 安装 🛠️
 
 ### 手动安装
