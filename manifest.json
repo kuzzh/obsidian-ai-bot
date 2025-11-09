@@ -1,7 +1,7 @@
 {
 	"id": "ai-bot",
 	"name": "AI bot",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"minAppVersion": "0.15.0",
 	"description": "Polish, summarize, translate, analyze, and interpret code using AI.",
 	"author": "kuzzh",
